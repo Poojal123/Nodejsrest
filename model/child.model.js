@@ -5,9 +5,9 @@ var Schema = mongoose.Schema;
 // var profile = new Schema({
 //     name:String
 // })
-var ProfileSchema = new Schema({
+var ChildSchema = new Schema({
     uid: String,
     profileUrl:String
 });
 // module.exports = mongoose.model('Semister', books);
-module.exports = mongoose.model('profile', ProfileSchema);
+module.exports = mongoose.model('ChildrenProfile', ChildSchema);
