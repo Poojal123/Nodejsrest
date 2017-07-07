@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require('express');  
 var router = express.Router();
 var user_controller = require('../controllers/user_controller');
 var profile_controller = require('../controllers/profile_controller');
@@ -16,5 +16,15 @@ router.post("/loginUser",user_controller.login);
 router.post('/upload',profile_controller.uploadProfile)
 router.post('/getProfile',profile_controller.getProfileDetails)
 router.post('/uploadChild',child_controller.uploadChild)
-// router.post('/getProfile',profile_controller.getProfileDetails)
+router.post('/uploadChildPhotos',child_controller.uploadPhotosOfChild)
+router.post('/getChildPhotos',child_controller.getPhotos)
+router.post('/getAllChildrens',child_controller.getAllChildrens)
+// router.post('/uploadChildPhotos',child_controller.uploadPhotosOfChild)
+// router.post('/uploadChildPhotos',child_controller.uploadPhotosOfChild)
+// router.post('/uploadChildPhotos',child_controller.uploadPhotosOfChild)
+// router.post('/uploadChildPhotos',child_controller.uploadPhotosOfChild)
+// router.post('/uploadChildPhotos',child_controller.uploadPhotosOfChild)
+// router.post('/uploadChildPhotos',child_controller.uploadPhotosOfChild)
+
+
 module.exports = router;

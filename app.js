@@ -6,13 +6,17 @@
   var session = require('express-session');
   var bodyParser = require('body-parser');
 
+// var connect = require('connect')
+// var serveStatic = require('serve-static')
+// var vhost = require('vhost')
 
 
   var index = require('./routes/index');
   var users = require('./routes/users');
 
   var app = express();
-    config = require('./config/db'),
+
+  config = require('./config/db'),
   mongoose = require('mongoose');
 
   mongoose.connect("mongodb://127.0.0.1:27017/testDB");
