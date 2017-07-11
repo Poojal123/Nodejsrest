@@ -9,10 +9,15 @@ var Images = new Schema({
     url:String,
     added_date_time:String
 })
+var Videos = new Schema({
+    url:String,
+    added_date_time:String
+})
 var ChildSchema = new Schema({
     uid: String,
     profileUrl:String,
-    photos:[Images]
+    photos:[Images],
+    videos:[Videos]
 });
 // module.exports = mongoose.model('Semister', books);
 module.exports = mongoose.model('ChildrenProfile', ChildSchema);

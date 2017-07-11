@@ -4,9 +4,9 @@ var child = require('../model/child.model');
 const fs = require('fs');
 var path = require('path');
 var dateTime = require('node-datetime');
+    var ffmpeg = require('fluent-ffmpeg');
 
-
-
+var yyyymmdd = require('yyyy-mm-dd')
  exports.uploadChild= function(req, res,next) {
     //  res("hiiii hellooo")
 
@@ -94,9 +94,10 @@ var dateTime = require('node-datetime');
                     console.log(f);
                     console.log(f.path)
                             var child_profile ={}
-                            child_profile.uid ="1499346628069";//req.body.uid;
+                            child_profile.uid =req.body.uid;
                             child_profile.profileUrl = "http://"+req.headers.host+"/"+f.path;
                             var dt = dateTime.create();
+                           
                             var formatted = dt.format('Y-m-d H:M:S');
                             console.log(formatted);
                             console.log("req.body.uid ===> "+req.body.uid);
@@ -130,3 +131,47 @@ var dateTime = require('node-datetime');
 
             }).catch(next);
      }
+        var videofileName=''
+        var storage = multer.diskStorage({
+                    destination: function(req, file, callback) {
+                        callback(null, './public/videos')
+                    },
+                    filename: function(req, file, callback) {
+                        console.log("xfgdfgdfgfg "+JSON.stringify(file))
+                        videofileName = file.fieldname + '-' + Date.now() + path.extname(file.originalname)
+                        callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+                    }
+                })
+     
+                var upload = multer({
+                    storage: storage
+                }).single('videoFile')
+
+            exports.uploadVideoOfChild = function(req,res,next){
+                
+                    upload(req, res, function(err) {
+                        if(err){
+                              res.send("Successfully uploaded")
+                        }else{
+                             console.log(req.file.path)
+                            // res.send("Successfully uploaded")
+                          
+                             var dt = dateTime.create();
+                             var formatted = yyyymmdd();
+                            //   console.log(yyyymmdd())
+                            child.update({ "uid": req.body.uid}, {
+                                $push: {
+                                    "videos": { "url": req.file.path,"added_date_time":formatted }
+                                }}).then(function(result                                                                                                                                                                                                                                           ){
+                                    if(result.ok){
+                                        res.send({"status":"true","statusCode":"200","message":"Profile Saved Successfully","uid":req.body.uid,"profile_pic":req.file.path,"added_date_time":formatted})
+                                    }else{
+                                        res.send({"status":"false","statusCode":"400","message":"Profile Not Saved"})
+                                    }
+                                 });
+                            
+                         }
+                       
+                   })
+            }
+        
