@@ -4,6 +4,7 @@ var semister = require('../model/user.model');
 var bcrypt = require('bcrypt');
 // var cookieParser = require('cookie-parser');
 // var session = require('express-session');
+var firebase = require('firebase');
 
 exports.registerUser = function(req,res,next){
       console.log(req.body);
@@ -32,21 +33,33 @@ exports.registerUser = function(req,res,next){
 }
 
 exports.login = function(res1,res,next){
-     users.find({ "email": res1.body.email }).then(function(userDetails){
-        console.log(userDetails[0].email)
-        bcrypt.compare(res1.body.password,userDetails[0].password, function(err, res1) {
-            if(res1) {
+    //  firebase.auth().signInWithEmailAndPassword("devid@gmail.com", "123456");
+     firebase.database().ref('childrenData')
+          .on('value', data => {
+            
+            res.send(data.val())
+          });
+    //     firebase.database().ref('/').set({
+    //     username: "test",
+    //     email: "test@mail.com"
+    // });
+    //  users.find({ "email": res1.body.email }).then(function(userDetails){
+    //     console.log(userDetails[0].email)
+    //     bcrypt.compare(res1.body.password,userDetails[0].password, function(err, res1) {
+    //         if(res1) {
                 
-                    res.send({"status":"true","statusCode":"200","message":"Logged in successfully","values":userDetails})
+    //                 res.send({"status":"true","statusCode":"200","message":"Logged in successfully","values":userDetails})
                     
-            }else{
+    //         }else{
                 
-                    res.send({"status":"false","status":"404","message":"wrong password or email please check","values":[]});
-            }
-            });
-    }).catch(next);
+    //                 res.send({"status":"false","status":"404","message":"wrong password or email please check","values":[]});
+    //         }
+    //         });
+    // }).catch(next);
   
 }
+
+
 
 exports.retriveUsers = function(req,res,next){
 

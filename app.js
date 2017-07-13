@@ -7,6 +7,15 @@
   var bodyParser = require('body-parser');
 
 // var connect = require('connect')
+var firebase = require('firebase');
+firebase.initializeApp({
+    apiKey: "AIzaSyBM1ysxV1LMxhfhpvT67H26DlxlWZpyWfQ",
+    authDomain: "ssss-164410.firebaseapp.com",
+    databaseURL: "https://ssss-164410.firebaseio.com",
+    projectId: "ssss-164410",
+    storageBucket: "ssss-164410.appspot.com",
+    messagingSenderId: "144923457663"
+});
 // var serveStatic = require('serve-static')
 // var vhost = require('vhost')
 
