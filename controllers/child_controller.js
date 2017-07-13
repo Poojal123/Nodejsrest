@@ -7,6 +7,7 @@ var dateTime = require('node-datetime');
     var ffmpeg = require('fluent-ffmpeg');
 
 var yyyymmdd = require('yyyy-mm-dd')
+ 
  exports.uploadChild= function(req, res,next) {
     //  res("hiiii hellooo")
 
@@ -26,15 +27,10 @@ var yyyymmdd = require('yyyy-mm-dd')
             console.log(err);
             res.send("Error uploading file.");
         } else {
-           
-           
-        //    console.log(req.body.file);
-        //    console.log(req.body.file.path)
-           req.files.forEach( function(f) {
+             req.files.forEach( function(f) {
              console.log(f);
-             // and move file to final destination...
+           
              console.log(f.path)
-            //  {name: data.childname,dob:data.birthday,profile_pic:res.profile_pic,age:data.age,uid_parent:data.uid_parent,uid_daycare:firebase.auth().currentUser.uid}
                     var child_profile ={}
                     child_profile.uid =req.body.uid;
                     child_profile.name=req.body.name;
@@ -124,14 +120,39 @@ var yyyymmdd = require('yyyy-mm-dd')
 
             }).catch(next);
      }
+
+     exports.updateChild = function(req , res , next){
+         var child_profile ={}
+                    child_profile.uid =req.body.uid;
+                   console.log("sharvari  ==>:"+req.body)
+         child.find({uid:req.body.uid}).then(function(details){
+            if(req.body.flag == 'unset'){
+                
+                   child.update({ "uid": req.body.uid },{$set: {profileUrl: req.body.profile_pic}},{ upsert: true }).then(function(child_deatails){
+                                if(child_deatails.ok){
+                                      res.send({"status":"true","statusCode":"200","message":"Profile Saved Successfully","uid":req.body.uid,"profile_pic":child_profile.profileUrl})
+
+                                }else{
+                                    
+                                        res.send({"status":"false","statusCode":"400","message":"Profile Not Saved"})
+                                    }
+
+                                })
+                    }        
+            }).catch(next);
+     }
+
      exports.getAllChildrens = function(req, res, next){
         child.find({}).then(function(details){
 
               res.send({"status":"true","statusCode":"200","message":"rescords found","values":details})
 
             }).catch(next);
+
      }
         var videofileName=''
+       
+       
         var storage = multer.diskStorage({
                     destination: function(req, file, callback) {
                         callback(null, './public/videos')
