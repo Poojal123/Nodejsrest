@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-// mongoose.connect('mongodb://127.0.0.1:27017/testDB');
+mongoose.connect('mongodb://127.0.0.1:27017/daycareDB');
 var Schema = mongoose.Schema;
 
 // var profile = new Schema({

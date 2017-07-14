@@ -28,13 +28,13 @@ firebase.initializeApp({
   config = require('./config/db'),
   mongoose = require('mongoose');
 
-  mongoose.connect("mongodb://127.0.0.1:27017/testDB");
-  mongoose.Promise = global.Promise;
-  var db = mongoose.connection;
+  // mongoose.connect("mongodb://127.0.0.1:27017/testDB");
+  // mongoose.Promise = global.Promise;
+  // var db = mongoose.connection;
 
-  db.on('error', function () {
-    throw new Error('unable to connect to database at ' + config.db);
-  });
+  // db.on('error', function () {
+  //   throw new Error('unable to connect to database at ' + config.db);
+  // });
   // view engine setup
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'jade');

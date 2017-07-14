@@ -38,7 +38,7 @@ var yyyymmdd = require('yyyy-mm-dd')
                     child_profile.age=req.body.age;
                     child_profile.uid_parent=req.body.uid_parent;
                     child_profile.uid_daycare = req.body.uid_daycare
-                    child_profile.profileUrl = "http://"+req.headers.host+"/"+f.path;
+                    child_profile.profileUrl = f.path;
 
                     console.log("req.body.uid ===> "+req.body.uid);
                     var uid_1 = req.body.uid
@@ -91,7 +91,8 @@ var yyyymmdd = require('yyyy-mm-dd')
                     console.log(f.path)
                             var child_profile ={}
                             child_profile.uid =req.body.uid;
-                            child_profile.profileUrl = "http://"+req.headers.host+"/"+f.path;
+                            child_profile.profileUrl = f.path;
+                            // child_profile.profileUrl = "http://"+req.headers.host+"/"+f.path;
                             var dt = dateTime.create();
                            
                             var formatted = dt.format('Y-m-d H:M:S');

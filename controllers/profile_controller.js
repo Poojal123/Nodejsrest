@@ -52,7 +52,7 @@ var Storage = multer.diskStorage({
              console.log(f.path)
               var user_profile ={}
                     user_profile.uid =req.body.uid;
-                    user_profile.profileUrl = "http://"+req.headers.host+"/"+f.path;
+                    user_profile.profileUrl = f.path;
 
                     console.log("req.body.uid ===> "+req.body.uid);
                     var uid_1 = req.body.uid
