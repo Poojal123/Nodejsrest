@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+    <% include ./partials/head %>
+</head>
+<body class="container-fluid">
+
+    <div id="header" class="navbar navbar-default navbar-fixed-top">
+    
+   <% include ./partials/header %>
+     </div>
+<div id="wrapper">
+  <div id="sidebar-wrapper" class="col-md-2">
+     <% include ./partials/sidebar %>
+   </div>
+   <div id="main-wrapper" class="col-md-10 pull-right">
+        <div id="main">
+            <div class="page-header">
+                <h3><%= child.name%>      <img src="<%= child.profile %>" height="45px" width="45px"></h3>
+            </div>
+            <div class="child-media">
+                <h4><center>Photos</center></h4>
+                <div class="child-photos row">
+                    
+                    <% if(photos.length > 0) { %>
+                      <% for(var i=0;i<photos.length;i++){ %>  
+                        <div class="col-md-3" style="padding-bottom:10px">
+                            <img src="<%= photos[i].url %>" height="200px" width="200px">
+                        </div>
+                        <%}%>    
+                    <%}%>
+                </div>
+                <hr>
+                <h4><center>Videos</center></h4>
+                <div class="child-videos row">
+                    <% if(videos.length > 0) { %>
+                      <% for(var i=0;i<videos.length;i++){ %>  
+                        <div class="col-md-3" style="padding-bottom:10px">
+                            <video width="200" height="200" poster="<%= child.profile %>" controls>
+                                <source src="<%= videos[i].url %>" type="video/mp4">
+                                <source src="<%= videos[i].url %>" type="video/ogg">
+                                    <source src="<%= videos[i].url %>" type="video/mov">
+                                                    
+                            </video>
+                            
+                        </div>
+                        <%}%>    
+                    <%}%>
+                </div>
+            </div>  
+        
+        </div>
+
+        
+
+  </div>
+</div>
+</body>
+<% include ./partials/footer %>
+</html>

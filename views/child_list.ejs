@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+    <% include ./partials/head %>
+</head>
+<body class="container-fluid">
+
+    <div id="header" class="navbar navbar-default navbar-fixed-top">
+    
+   <% include ./partials/header %>
+     </div>
+<div id="wrapper">
+  <div id="sidebar-wrapper" class="col-md-2">
+     <% include ./partials/sidebar %>
+   </div>
+   <div id="main-wrapper" class="col-md-10 pull-right">
+        <div id="main">
+            <div class="page-header">
+                <h3>Child List (<%= daycare_name%>)</h3>
+            </div>
+            <div class="data-table">
+              <table id="day_care_list" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Sr.No.</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>D.O.B</th>
+                        <th>Profile Pic</th>
+                        <th>Action</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+
+                     <% if(child_list.length > 0) {
+                            for(var i=0; i<child_list.length; i++) { %>
+                            <tr>
+                                <td><%= (i+1) %></td>
+                                <td><%= child_list[i].name %></td>
+                                <td><%= child_list[i].age %></td>
+                                <td><%= child_list[i].dob %></td>
+                                <td><img src="<%= child_list[i].profile_pic %>" height="30px" width="30px"></td>
+                                <td><a href="/admin/child_id/?child_id=<%= child_list[i].child_id%>"><button type="button" class="btn btn-info">View</button></a></td>
+                            </tr>
+                        <% }
+                     }  
+                  %>  
+                </tobdy>    
+              </table>  
+            </div>  
+        
+        </div>
+
+        
+
+  </div>
+</div>
+</body>
+<% include ./partials/footer %>
+</html>

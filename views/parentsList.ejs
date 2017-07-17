@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <% include ./partials/head %>
+</head>
+<body class="container-fluid">
+
+    <div id="header" class="navbar navbar-default navbar-fixed-top">
+    
+   <% include ./partials/header %>
+     </div>
+<div id="wrapper">
+  <div id="sidebar-wrapper" class="col-md-2">
+     <% include ./partials/sidebar %>
+   </div>
+   <div id="main-wrapper" class="col-md-10 pull-right">
+        <div id="main">
+            <div class="page-header">
+                <h3>Parents List</h3>
+            </div>
+            <div class="data-table">
+              <table id="day_care_list" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Sr.No.</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Total Child</th>
+                        <th>Action</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                     <% for(var i=0; i<parents.length; i++) { %>
+                      <tr>
+                          <td><%= (i+1) %></td>
+                          <td><%= parents[i].name %></td>
+                          <td><%= parents[i].email %></td>
+                          <td><%= parents[i].mobile %></td>
+                          <td><%= parents[i].count %></td>
+                          <td><a href="uid_parent/?parent_id=<%= parents[i].id%>"><button type="button" class="btn btn-info">View</button></a></td>
+                      </tr>
+                  <% } %>  
+                </tobdy>    
+              </table>  
+            </div>  
+        
+        </div>
+
+        
+
+  </div>
+</div>
+</body>
+<% include ./partials/footer %>
+</html>
