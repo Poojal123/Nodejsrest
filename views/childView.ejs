@@ -24,18 +24,45 @@
                     <% if(photos.length > 0) { %>
                       <% for(var i=0;i<photos.length;i++){ %>  
                         <div class="col-md-3" style="padding-bottom:10px">
-                            <img src="<%= photos[i].url %>" height="200px" width="200px">
+                            <img src="<%= photos[i].url %>" height="165px" width="250px">
                         </div>
                         <%}%>    
                     <%}%>
                 </div>
+                <% if( pageCount >1 ) {%>
+                  <ul class="pagination">
+	            <% if (currentPage > 1) { temp = currentPage -1; %>
+	                <li><a href="?child_id=<%=cid%>&page=<%= temp%>&video_page=<%=video_pageCount%>">&laquo;</a></li>
+	            <% } %>
+	            <% var i = 1;
+	            if (currentPage > 5) {
+	                i = +currentPage - 4;
+	            } %>
+	            <% if (i !== 1) { %>
+	                <li class="disabled"><a href="#">...</a></li>
+	            <% } %>
+	            <% for (i; i<=pageCount; i++) { %>
+	                <% if (currentPage == i) { %>
+	                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+	                <% } else { %>
+	                    <li><a href="?child_id=<%=cid%>&page=<%= i %>&video_page=<%=video_pageCount%>"><%= i %></a></li>
+	                <% } %>
+	                <% if (i == (+currentPage + 4)) { %>
+	                    <li class="disabled"><a href="#">...</a></li>
+	                <% break; } %>
+	            <% } %>
+	            <% if (currentPage != pageCount) { temp = (++currentPage); %>
+	                <li><a href="?child_id=<%=cid%>&page=<%= temp %>&video_page=<%=video_pageCount%>">&raquo;</a></li>
+	            <% } %>
+	        </ul>   
+               <% } %> 
                 <hr>
                 <h4><center>Videos</center></h4>
                 <div class="child-videos row">
                     <% if(videos.length > 0) { %>
                       <% for(var i=0;i<videos.length;i++){ %>  
                         <div class="col-md-3" style="padding-bottom:10px">
-                            <video width="200" height="200" poster="<%= child.profile %>" controls>
+                            <video width="250" height="165" poster="<%= child.profile %>" controls>
                                 <source src="<%= videos[i].url %>" type="video/mp4">
                                 <source src="<%= videos[i].url %>" type="video/ogg">
                                     <source src="<%= videos[i].url %>" type="video/mov">
@@ -46,6 +73,33 @@
                         <%}%>    
                     <%}%>
                 </div>
+                 <% if( video_pageCount >1 ) {%>
+                  <ul class="pagination">
+	            <% if (video_currentPage > 1) { temp = video_currentPage -1; %>
+	                <li><a href="?child_id=<%=cid%>&video_page=<%= temp%>&page=<%=pageCount%>">&laquo;</a></li>
+	            <% } %>
+	            <% var i = 1;
+	            if (video_currentPage > 5) {
+	                i = +video_currentPage - 4;
+	            } %>
+	            <% if (i !== 1) { %>
+	                <li class="disabled"><a href="#">...</a></li>
+	            <% } %>
+	            <% for (i; i<=video_pageCount; i++) { %>
+	                <% if (video_currentPage == i) { %>
+	                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+	                <% } else { %>
+	                    <li><a href="?child_id=<%=cid%>&video_page=<%= i %>&page=<%=pageCount%>"><%= i %></a></li>
+	                <% } %>
+	                <% if (i == (+video_currentPage + 4)) { %>
+	                    <li class="disabled"><a href="#">...</a></li>
+	                <% break; } %>
+	            <% } %>
+	            <% if (video_currentPage != video_pageCount) { temp = (++video_currentPage); %>
+	                <li><a href="?child_id=<%=cid%>&video_page=<%= temp %>&page=<%=pageCount%>">&raquo;</a></li>
+	            <% } %>
+	        </ul>   
+               <% } %> 
             </div>  
         
         </div>

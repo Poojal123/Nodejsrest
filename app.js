@@ -111,10 +111,11 @@ app.use(function(req, res, next) {
   // error handler
 
 
-  //RBJT...
+ //RBJT...
 var sess;
 app.get('/admin',function(req,res){
 sess = req.session;
+
 if(sess.email) {
     res.render('index.ejs', { title: 'Express' });
 }
@@ -132,13 +133,13 @@ app.get('/admin/login',function(req, res){
 });
 app.post('/admin/logindo',function(req,res){
   sess = req.session;
-  
+ 
     var email = req.body.username;
     var password = req.body.password;
     var student = new Array();
     firebase.auth().signInWithEmailAndPassword(email, password).then(function(uid) {
        sess.email = req.body.username;
-      console.log(uid.uid);
+      //  console.log(uid.uid);
       res.redirect('/admin');
     }).catch(function(error) {
     // Handle Errors here.
@@ -377,12 +378,33 @@ app.get('/admin/uid_parent',function(req,res){
   }
 });
 app.get('/admin/child_id/',function(req,res){
+//photos pagination...
+var photo_totalRec = 0,
+photo_pageSize  = 16,
+photo_pageCount = 0;
+var photo_start = 0;
+var photo_end = photo_pageSize;
+var photo_currentPage = 1;
+//photos pagination...
+
+//videos pagination...
+var video_totalRec = 0,
+video_pageSize  = 16,
+video_pageCount = 0;
+var video_start = 0;
+var video_end = video_pageSize;
+var video_currentPage = 1;
+//videos pagination...
+
 sess = req.session;
 var photos = new Array();
-var videos = new Array(); 
+var videos = new Array();
+var temp=0;
+var video_temp=0; 
 var child = [];
 if(sess.email) {
      cid = req.query.child_id;
+      
      database.ref('/childrenData/'+cid).once('value', function(childs) {
        var host = req.get('host');
        var http = req.protocol;
@@ -392,52 +414,106 @@ if(sess.email) {
          'profile':image
        } 
        
+       
         if( !("photos" in childs.val()) == 0){
            photo_length = Object.keys(childs.val().photos).length;
-           
-           for(var i=0;i<photo_length;i++){
+           //RBJT...
+            photo_totalRec = Object.keys(childs.val().photos).length;
+            photo_pageCount     =  Math.ceil(photo_totalRec /  photo_pageSize);
+            
+            if (typeof req.query.page !== 'undefined') {
+                photo_currentPage = req.query.page;
+              }
+            if(photo_currentPage >1){
+                photo_start = (photo_currentPage - 1) * photo_pageSize;
+                photo_end = photo_start + photo_pageSize;
+            }
+            if(photo_end > photo_length){
+              photo_end = photo_length;
+            }
+          //RBJT...
+
+           for(var i=photo_start;i<photo_end;i++){
              var key = Object.keys(childs.val().photos)[i];
              var host = req.get('host');
              var http = req.protocol;
+             
              var image = childs.val().photos[key].url == null ? '' : http + "://" + host +"/"+ childs.val().photos[key].url;
-              photos [i]={
+              photos [temp]={
                  'url': image
               }
+              temp++;  
            }
           if( !("videos" in childs.val()) == 0){
               video_length = Object.keys(childs.val().videos).length;
-             
+              //RBJT...
+              video_totalRec = Object.keys(childs.val().videos).length;
+              video_pageCount     =  Math.ceil(video_totalRec /  video_pageSize);
+              
+              if (typeof req.query.video_page !== 'undefined') {
+                  video_currentPage = req.query.video_page;
+                }
+              if(video_currentPage >1){
+                  video_start = (video_currentPage - 1) * video_pageSize;
+                  video_end = video_start + video_pageSize;
+              }
+              if(video_end > video_length){
+                 video_end = video_length;
+              }
+            //RBJT...
               for(var i=0;i<video_length;i++){
                  
                 var key = Object.keys(childs.val().videos)[i];
                 var host = req.get('host');
                   var http = req.protocol;
                   var video = childs.val().videos[key].url == null ? '' : http + "://" + host +"/"+ childs.val().videos[key].url;
-                  videos [i]={
+                  videos [video_temp]={
                     'url':video
                   }
+                  video_temp++;
                }
-
+               
             }  
           //  console.log(child);
           //  console.log(photos);
           //  console.log(videos);
-          res.render('childView.ejs',{child:child,photos:photos,videos:videos});
+          res.render('childView.ejs',{cid:cid,child:child,photos:photos,videos:videos,pageCount: photo_pageCount,currentPage: photo_currentPage,video_pageCount: video_pageCount,video_currentPage: video_currentPage});
         }
         else{
           if( !("videos" in childs.val()) == 0){
               video_length = Object.keys(childs.val().videos).length;
+              //RBJT...
+              video_totalRec = Object.keys(childs.val().videos).length;
+              video_pageCount     =  Math.ceil(video_totalRec /  video_pageSize);
+              
+              if (typeof req.query.video_page !== 'undefined') {
+                  video_currentPage = req.query.video_page;
+                }
+              if(video_currentPage >1){
+                  video_start = (video_currentPage - 1) * video_pageSize;
+                  video_end = video_start + video_pageSize;
+              }
+              if(video_end > video_length){
+                 video_end = video_length;
+              }
+            //RBJT...
               for(var i=0;i<video_length;i++){
+                 
                 var key = Object.keys(childs.val().videos)[i];
-                  videos [i]={
-                    'url':childs.val().videos[key].url
+                var host = req.get('host');
+                  var http = req.protocol;
+                  var video = childs.val().videos[key].url == null ? '' : http + "://" + host +"/"+ childs.val().videos[key].url;
+                  videos [ivideo_temp]={
+                    'url':video
                   }
+                  video_temp++;
                }
+               
             }
               // console.log(child);
               // console.log(photos);
               // console.log(videos);
-              res.render('childView.ejs',{child:child,photos:photos,videos:videos});     
+              res.render('childView.ejs',{cid:cid,child:child,photos:photos,videos:videos,pageCount: photo_pageCount,currentPage: photo_currentPage,video_pageCount: video_pageCount,video_currentPage: video_currentPage});    
         }  
         
         
@@ -449,7 +525,6 @@ if(sess.email) {
     }
 });  
 //RBJT...
-
   // app.use(session({secret: "Shh, its a secret!"}));
   app.use('/', index);
   // app.use('/api/users', users);
