@@ -5,9 +5,11 @@
   var cookieParser = require('cookie-parser');
   var session = require('express-session');
   var bodyParser = require('body-parser');
+  var flash   = require('connect-flash');
 //multiple RBJT views...
 var engines = require('consolidate');
 //multiple RBJT views...
+var ffmpeg = require('fluent-ffmpeg');
 
 // var connect = require('connect')
 var firebase = require("firebase");
@@ -28,7 +30,14 @@ var database = firebase.database();
   var app = express();
 
 //RBJT
-app.use(session({secret: 'ssshhhhh'}));
+//RBJT
+app.use(session({
+  secret: 'my-super-secret', 
+  // cookie: { maxAge: 60000 },
+  // resave: false,    // forces the session to be saved back to the store
+  //saveUninitialized: false  // dont save unmodified
+}));
+//RBJT
 //RBJT
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -112,12 +121,19 @@ app.use(function(req, res, next) {
 
 
  //RBJT...
+app.use(flash());
+
+//RBJT...
+
+
+//RBJT...
 var sess;
 app.get('/admin',function(req,res){
 sess = req.session;
 
 if(sess.email) {
-    res.render('index.ejs', { title: 'Express' });
+  
+    res.redirect('/admin/day-cares');
 }
 else {
     res.redirect('/admin/login');
@@ -154,6 +170,7 @@ app.get('/admin/logout',function(req, res){
    res.redirect('/admin/login');
 });
 app.get('/admin/day-cares',function(req, res){
+  var success_message = req.flash();
 sess = req.session;
 var dayCares = new Array();
 var childLen = new Array();
@@ -193,7 +210,7 @@ if(sess.email) {
                     }
                   }
               }
-                res.render('dayCareList.ejs',{dayCares:dayCares});
+                res.render('dayCareList.ejs',{dayCares:dayCares,success_message:success_message});
              });         
             
               // for(var i=0;i<dayCares.length;i++){
@@ -380,7 +397,7 @@ app.get('/admin/uid_parent',function(req,res){
 app.get('/admin/child_id/',function(req,res){
 //photos pagination...
 var photo_totalRec = 0,
-photo_pageSize  = 16,
+photo_pageSize  = 4,
 photo_pageCount = 0;
 var photo_start = 0;
 var photo_end = photo_pageSize;
@@ -525,6 +542,51 @@ if(sess.email) {
     }
 });  
 //RBJT...
+//RBJT 18/7/2017...
+app.get('/admin/add-daycare',function(req, res){
+   var error_message = req.flash();
+  
+   sess = req.session;
+   if(sess.email) {
+     res.render('addDaycare.ejs',{error_message:error_message});
+  }
+  else{
+    res.redirect('/admin/login'); 
+  }
+});
+app.post('/admin/add-do',function(req, res){
+   sess = req.session;
+   if(sess.email) {
+     var email = req.body.email;
+     var password = req.body.password;
+     var username = req.body.username;
+     var mobile = req.body.mobile;
+     firebase.auth().createUserWithEmailAndPassword(email, password).       
+         then(
+            function(user){
+                uid = user.uid;
+                var key_id = firebase.database().ref('/userData/'+ uid).set({
+                    username:username,
+                    email:email,
+                    password:password,
+                    mobile:mobile
+                    })
+                req.flash('addsuccess', 'successfully Added Day cares');  
+                res.redirect('/admin/day-cares');
+            },
+            function(error){ 
+              
+              req.flash('errorMessage', error.message);
+            
+                res.redirect('/admin/add-daycare');
+            }
+          );
+  }
+  else{
+    res.redirect('/admin/login'); 
+  } 
+});
+//RBJT 18/7/2017...
   // app.use(session({secret: "Shh, its a secret!"}));
   app.use('/', index);
   // app.use('/api/users', users);

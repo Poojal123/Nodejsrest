@@ -4,8 +4,8 @@ var child = require('../model/child.model');
 const fs = require('fs');
 var path = require('path');
 var dateTime = require('node-datetime');
-    var ffmpeg = require('fluent-ffmpeg');
-
+var ffmpeg = require('fluent-ffmpeg');
+// var ffmpeg = require('../index');
 var yyyymmdd = require('yyyy-mm-dd')
  
  exports.uploadChild= function(req, res,next) {
@@ -181,16 +181,38 @@ var yyyymmdd = require('yyyy-mm-dd')
                              var dt = dateTime.create();
                              var formatted = yyyymmdd();
                             //   console.log(yyyymmdd())
-                            child.update({ "uid": req.body.uid}, {
-                                $push: {
-                                    "videos": { "url": req.file.path,"added_date_time":formatted }
-                                }}).then(function(result                                                                                                                                                                                                                                           ){
-                                    if(result.ok){
-                                        res.send({"status":"true","statusCode":"200","message":"Profile Saved Successfully","uid":req.body.uid,"profile_pic":req.file.path,"added_date_time":formatted})
-                                    }else{
-                                        res.send({"status":"false","statusCode":"400","message":"Profile Not Saved"})
-                                    }
-                                 });
+                            
+                            // var proc = new ffmpeg("http://localhost:3000/public/videos/videoFile-1499770807257.mp4")
+                            // .takeScreenshots({
+                            //     count: 1,
+                            //     timemarks: [ '600' ] // number of seconds
+                            //     }, './public/videos/thumbnail', function(err) {
+                            //     console.log('screenshots were saved')
+                            // });
+                          var proc = ffmpeg("http://localhost:3000/public/videos/videoFile-1499770807257.mp4")
+  // setup event handlers
+                            .on('filenames', function(filenames) {
+                                console.log('screenshots are ' + filenames.join(', '));
+                            })
+                            .on('end', function() {
+                                console.log('screenshots were saved');
+                            })
+                            .on('error', function(err) {
+                                console.log('an error happened: ' + err.message);
+                            })
+                            // take 2 screenshots at predefined timemarks and size
+                            .takeScreenshots({ count: 2, timemarks: [ '00:00:02.000', '6' ], size: '150x100' }, './public/videos/thumbnail');
+
+                            // child.update({ "uid": req.body.uid}, {
+                            //     $push: {
+                            //         "videos": { "url": req.file.path,"added_date_time":formatted }
+                            //     }}).then(function(result                                                                                                                                                                                                                                           ){
+                            //         if(result.ok){
+                            //             res.send({"status":"true","statusCode":"200","message":"Profile Saved Successfully","uid":req.body.uid,"profile_pic":req.file.path,"added_date_time":formatted})
+                            //         }else{
+                            //             res.send({"status":"false","statusCode":"400","message":"Profile Not Saved"})
+                            //         }
+                            //      });
                             
                          }
                        

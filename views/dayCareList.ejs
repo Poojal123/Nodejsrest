@@ -15,7 +15,16 @@
    <div id="main-wrapper" class="col-md-10 pull-right">
         <div id="main">
             <div class="page-header">
-                <h3>DayCares List</h3>
+                <h3>Daycare List</h3>
+                <%
+                if(typeof  success_message.addsuccess != 'undefined' ){%>
+                 
+                 <div class="alert alert-success">
+                    <strong>Success!</strong> successfully Added Day cares.
+                 </div>
+                <%}
+                %> 
+                <spna style="float:right;margin-top: -3em;"><a href="add-daycare"><button type="button" class="btn btn-primary">Add</button></a></span>
             </div>
             <div class="data-table">
               <table id="day_care_list" class="display" cellspacing="0" width="100%">
@@ -25,7 +34,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                        <th>Total Child</th>
+                        <th>No. of children</th>
                         <th>Action</th>
                     
                     </tr>
